@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raining Words Animation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #282c34;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .raining-word {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+            animation: fall 5s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -50px;
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        #rain-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #start-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #61dafb;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #start-button:hover {
+            background-color: #21a1f1;
+        }
+    </style>
+</head>
+<body>
+    <button id="start-button">Start Raining Words</button>
+    <div id="rain-container"></div>
+
+    <script>
+        document.getElementById('start-button').addEventListener('click', function() {
+            let rainContainer = document.getElementById('rain-container');
+            let words = ['sanku'];  // Word to rain down
+            let numberOfWords = 50; // Number of words to display
+
+            for (let i = 0; i < numberOfWords; i++) {
+                let word = document.createElement('div');
+                word.classList.add('raining-word');
+                word.innerText = words[Math.floor(Math.random() * words.length)];
+
+                // Randomize the starting position for each word
+                word.style.left = Math.random() * 100 + 'vw';  // Random left position (viewport width)
+                word.style.animationDuration = Math.random() * 5 + 5 + 's';  // Random fall speed
+
+                rainContainer.appendChild(word);
+            }
+        });
+    </script>
+</body>
+</html>
