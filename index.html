@@ -3,46 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raining Words Animation</title>
+    <title>Capture Photo from Camera</title>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #282c34;
-            color: white;
-            font-family: Arial, sans-serif;
+        #camera-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
-
-        .raining-word {
-            position: absolute;
-            font-size: 24px;
-            opacity: 0;
-            animation: fall 5s linear infinite;
-        }
-
-        @keyframes fall {
-            0% {
-                top: -50px;
-                opacity: 1;
-            }
-            100% {
-                top: 100%;
-                opacity: 0;
-            }
-        }
-
-        #rain-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        #start-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+        #capture-btn {
+            margin-top: 20px;
             padding: 10px 20px;
             background-color: #61dafb;
             border: none;
@@ -50,34 +20,42 @@
             font-size: 16px;
             cursor: pointer;
         }
-
-        #start-button:hover {
+        #capture-btn:hover {
             background-color: #21a1f1;
+        }
+        #camera-video {
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        #captured-photo {
+            border: 1px solid #ccc;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <button id="start-button">Start Raining Words</button>
-    <div id="rain-container"></div>
+    <div id="camera-container">
+        <video id="camera-video" width="640" height="480" autoplay></video>
+        <button id="capture-btn">Capture Photo</button>
+        <canvas id="captured-photo" width="640" height="480"></canvas>
+    </div>
 
     <script>
-        document.getElementById('start-button').addEventListener('click', function() {
-            let rainContainer = document.getElementById('rain-container');
-            let words = ['sanku'];  // Word to rain down
-            let numberOfWords = 50; // Number of words to display
+        // Access the camera
+        const videoElement = document.getElementById('camera-video');
+        const captureButton = document.getElementById('capture-btn');
+        const canvas = document.getElementById('captured-photo');
+        const context = canvas.getContext('2d');
 
-            for (let i = 0; i < numberOfWords; i++) {
-                let word = document.createElement('div');
-                word.classList.add('raining-word');
-                word.innerText = words[Math.floor(Math.random() * words.length)];
+        // Request camera access
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                videoElement.srcObject = stream;
+            })
+            .catch(function (error) {
+                console.error('Error accessing the camera: ', error);
+            });
 
-                // Randomize the starting position for each word
-                word.style.left = Math.random() * 100 + 'vw';  // Random left position (viewport width)
-                word.style.animationDuration = Math.random() * 5 + 5 + 's';  // Random fall speed
-
-                rainContainer.appendChild(word);
-            }
-        });
-    </script>
-</body>
-</html>
+        // Capture photo when button is clicked
+        captureButton.addEventListener('click', function () {
+            context.drawImage(videoElement, 0, 0
